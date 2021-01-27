@@ -160,12 +160,12 @@ export default Vue.extend({
           return response.json();
         })
         .then(response => {
-          let favs: string[] = this.favorites;
+          const favs: string[] = this.favorites;
           favs.push(response.data);
         })
         .catch(error => console.log(error));
     },
-    remove(id: string) {
+    remove(id: string): void {
       this.favorites = this.favorites.filter(function(e: {
         [k: string]: string;
       }) {
