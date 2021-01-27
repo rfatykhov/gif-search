@@ -110,8 +110,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   data() {
     return {
       trend: [],
@@ -120,7 +122,7 @@ export default {
       favorites: []
     };
   },
-  async fetch() {
+  async fetch(): Promise<void> {
     await fetch(
       "https://api.giphy.com/v1/gifs/trending?api_key=39vI8skUqOzHnLMOJZiRkLKJ7SIWbQ4J&q=&limit=10"
     )
@@ -134,7 +136,7 @@ export default {
   },
 
   methods: {
-    search() {
+    search(): void {
       fetch(
         "https://api.giphy.com/v1/gifs/search?api_key=39vI8skUqOzHnLMOJZiRkLKJ7SIWbQ4J&q=" +
           this.query +
@@ -148,7 +150,7 @@ export default {
         })
         .catch(error => console.log(error));
     },
-    add(id) {
+    add(id: string): void {
       fetch(
         "https://api.giphy.com/v1/gifs/" +
           id +
@@ -158,16 +160,20 @@ export default {
           return response.json();
         })
         .then(response => {
-          this.favorites.push(response.data);
+          let favs: string[] = this.favorites;
+          favs.push(response.data);
         })
         .catch(error => console.log(error));
     },
-    remove(id) {
-      this.favorites = this.favorites.filter(el => el.id !== id);
-      console.log(this.favorites);
+    remove(id: string) {
+      this.favorites = this.favorites.filter(function(e: {
+        [k: string]: string;
+      }) {
+        return e.id !== id;
+      });
     }
   }
-};
+});
 </script>
 
 <style>
